@@ -16,7 +16,7 @@ def get_status(session: Session = Depends(get_session)):
     today = date.today()
 
     items = session.exec(select(MaintenanceItem)).all()
-    counts = {"ok": 0, "due_soon": 0, "overdue": 0}
+    counts = {"ok": 0, "due_soon": 0, "overdue": 0, "inspect": 0}
 
     for item in items:
         last_log = session.exec(

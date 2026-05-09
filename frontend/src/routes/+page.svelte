@@ -9,7 +9,7 @@
   let newOdometer = $state('');
   let savingOdometer = $state(false);
 
-  const statusOrder: Status[] = ['overdue', 'due_soon', 'ok'];
+  const statusOrder: Status[] = ['overdue', 'due_soon', 'ok', 'inspect'];
 
   let sortedItems = $derived(
     [...$items].sort(
@@ -21,6 +21,7 @@
     ok: $items.filter((i) => i.status === 'ok').length,
     due_soon: $items.filter((i) => i.status === 'due_soon').length,
     overdue: $items.filter((i) => i.status === 'overdue').length,
+    inspect: $items.filter((i) => i.status === 'inspect').length,
   });
 
   let lastUpdate = $derived(() => {
@@ -97,6 +98,11 @@
         <div class="summary-chip" style="color: var(--color-ok);">
           <strong>{counts.ok}</strong> OK
         </div>
+        {#if counts.inspect > 0}
+          <div class="summary-chip" style="color: #94a3b8;">
+            <strong>{counts.inspect}</strong> inspect
+          </div>
+        {/if}
       </div>
     {/if}
 

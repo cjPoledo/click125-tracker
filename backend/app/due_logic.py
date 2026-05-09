@@ -38,7 +38,7 @@ def compute_status(
             statuses.append("ok")
 
     if not statuses:
-        return "ok"
+        return "inspect"
     if "overdue" in statuses:
         return "overdue"
     if "due_soon" in statuses:

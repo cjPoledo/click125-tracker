@@ -1,4 +1,4 @@
-export type Status = 'ok' | 'due_soon' | 'overdue';
+export type Status = 'ok' | 'due_soon' | 'overdue' | 'inspect';
 
 export interface Motorcycle {
   id: number;
@@ -45,6 +45,7 @@ export interface StatusSummary {
   ok: number;
   due_soon: number;
   overdue: number;
+  inspect: number;
 }
 
 export interface Settings {

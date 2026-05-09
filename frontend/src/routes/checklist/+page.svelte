@@ -112,7 +112,10 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
               {/if}
             </span>
-            <span class="check-text" class:check-text--done={checks[i]}>{i + 1}. {item}</span>
+            <span class="check-text" class:check-text--done={checks[i]}>
+              <span class="check-title">{i + 1}. {item.title}</span>
+              <span class="check-desc">{item.description}</span>
+            </span>
           </button>
         </li>
       {/each}
@@ -213,7 +216,7 @@
     text-align: left;
     padding: 14px var(--space-sm);
     border-radius: var(--radius-md);
-    min-height: 52px;
+    min-height: 60px;
     transition: background 100ms ease;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -240,7 +243,9 @@
   }
 
   .check-text {
-    font-size: var(--text-base);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
     line-height: 1.4;
     color: var(--color-text);
     transition: color 150ms ease;
@@ -249,4 +254,6 @@
     color: var(--color-text-muted);
     text-decoration: line-through;
   }
+  .check-title { font-size: var(--text-base); font-weight: 600; }
+  .check-desc  { font-size: var(--text-sm); color: var(--color-text-muted); }
 </style>

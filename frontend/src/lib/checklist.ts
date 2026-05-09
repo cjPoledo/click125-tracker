@@ -1,18 +1,17 @@
-const ITEMS = [
-  'Fuel level — sufficient for the ride?',
-  'Engine oil level — within MIN/MAX on dipstick?',
-  'Coolant level — within MIN/MAX on reserve tank?',
-  'Brake fluid level — within MIN/MAX on reservoir?',
-  'Front brake operation — firm lever feel, no excessive play?',
-  'Rear brake operation — firm lever feel, rear brake lock releases fully?',
-  'Tyre condition — no cuts, cracks, or embedded objects?',
-  'Tyre pressure — check and inflate if needed',
-  'Lights — headlight (high/low beam), brake light, turn signals all working?',
-  'Horn — works?',
-  'Throttle — opens smoothly, snaps back when released?',
-  'Side stand — retracts fully, cut-off switch working?',
-  'Mirrors — properly adjusted?',
-  'Loose parts / nuts — nothing obviously loose or rattling?',
+export interface ChecklistItem {
+  title: string;
+  description: string;
+}
+
+const ITEMS: ChecklistItem[] = [
+  { title: 'Fuel',         description: 'Check fuel level; refuel before riding if low.' },
+  { title: 'Engine oil',   description: 'Check oil level via sight glass on right crankcase; top up if needed.' },
+  { title: 'Coolant',      description: 'Check coolant level in reserve tank; top up with distilled water if low.' },
+  { title: 'Brakes',       description: 'Check lever and pedal travel and feel; confirm rear brake lock engages and releases fully.' },
+  { title: 'Tyres',        description: 'Check for cuts, cracks, or embedded objects; verify pressure (F: 200 kPa · R: 225 kPa).' },
+  { title: 'Lights & horn', description: 'Check headlight (high/low), tail light, brake light, turn signals, and horn.' },
+  { title: 'Throttle',     description: 'Confirm throttle opens smoothly and snaps fully closed when released.' },
+  { title: 'Side stand',   description: 'Confirm stand retracts fully and the cut-off switch returns the engine to idle.' },
 ];
 
 function todayKey(): string {

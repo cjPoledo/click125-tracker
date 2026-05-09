@@ -7,6 +7,7 @@
     ok: 'OK',
     due_soon: 'Due Soon',
     overdue: 'Overdue',
+    inspect: 'Inspect',
   };
 </script>
 

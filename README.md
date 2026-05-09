@@ -13,36 +13,48 @@ A Progressive Web App for tracking Honda Click 125i (2024, Philippines) maintena
 - Offline support via service worker
 - Installable PWA (Add to Home Screen)
 
-## Quick Start
+---
 
-### 1. Clone and configure
+## Deployment (Portainer + Cloudflare Tunnel)
 
-```bash
-git clone <your-repo-url> click125-tracker
-cd click125-tracker
-cp .env.example .env
-```
+This setup uses your existing `cloudflared` container for ingress — no host ports are opened. Cloudflare handles SSL. nginx runs as a container inside the stack and routes `/api/` to the FastAPI backend and everything else to the SvelteKit frontend.
 
-Edit `.env` — at minimum, fill in your Telegram bot token and chat ID if you want notifications. You can also configure these later via the Settings page in the app.
-
-**To get a Telegram bot:**
-1. Message [@BotFather](https://t.me/BotFather) → `/newbot` → follow prompts
-2. Copy the token it gives you
-3. Message [@userinfobot](https://t.me/userinfobot) to get your chat ID
-
-### 2. Launch
+### 1. One-time server setup
 
 ```bash
-docker compose up --build -d
+# Create the shared Docker network (skip if it already exists)
+docker network create cloudflared
+
+# Connect your existing cloudflared container to it
+docker network connect cloudflared <your-cloudflared-container-name>
 ```
 
-The app will be available at:
-- **App (frontend)**: http://localhost:3000
-- **API (Swagger docs)**: http://localhost:8000/docs
+### 2. Configure the Cloudflare Tunnel
 
-### 3. First run
+In the [Cloudflare Zero Trust dashboard](https://one.dash.cloudflare.com/) → Networks → Tunnels → your tunnel → **Public Hostnames** → Add:
 
-1. Open http://localhost:3000 on your phone
+| Field | Value |
+|-------|-------|
+| Subdomain / Domain | `your-domain.com` (or a subdomain) |
+| Service type | HTTP |
+| URL | `nginx:80` |
+
+Cloudflare resolves `nginx` to the nginx container via the shared `cloudflared` Docker network.
+
+### 3. Deploy via Portainer
+
+1. Portainer → **Stacks** → **Add Stack**
+2. Paste the contents of `docker-compose.yml` (or connect your Git repo)
+3. Set environment variables:
+   - `TELEGRAM_BOT_TOKEN` — from [@BotFather](https://t.me/BotFather) (optional, configurable later in the app)
+   - `TELEGRAM_CHAT_ID` — from [@userinfobot](https://t.me/userinfobot) (optional)
+4. **Deploy the stack**
+
+The stack starts 3 containers: `backend`, `frontend`, `nginx`. The nginx container joins the `cloudflared` network so your tunnel can reach it.
+
+### 4. First run
+
+1. Open your tunnel URL on your phone (e.g. `https://click125.your-domain.com`)
 2. Tap the odometer reading to set your current km
 3. Tap **+** to log any maintenance you've already done (otherwise all 20 items will show Overdue)
 4. Go to **Settings** to confirm your Telegram credentials
@@ -52,15 +64,18 @@ The app will be available at:
 - **iOS**: Safari → Share → Add to Home Screen
 - **Android**: Chrome → menu (⋮) → Add to Home Screen (or install prompt will appear automatically)
 
-## Reverse Proxy (nginx)
+### Updating
 
-If you want to serve from a single domain (recommended), see `nginx.conf` for a sample proxy config. Update `your-domain.com` and SSL certificate paths as needed.
+Rebuild in Portainer (pull latest images / redeploy stack), or:
 
 ```bash
-# Example: serve both frontend and backend via nginx on port 80/443
-# Place nginx.conf content in /etc/nginx/sites-available/click125
-# Then: sudo nginx -t && sudo nginx -s reload
+docker compose build
+docker compose up -d
 ```
+
+Your database persists in a Docker named volume (`db_data`) and survives container rebuilds.
+
+---
 
 ## Telegram Reminders
 
@@ -70,18 +85,17 @@ The app checks daily at 7:00 AM (server time) and sends a message for any item t
 
 You can trigger a manual test from **Settings → Test Reminders Now**.
 
+**To get a Telegram bot:**
+1. Message [@BotFather](https://t.me/BotFather) → `/newbot` → follow prompts → copy the token
+2. Message [@userinfobot](https://t.me/userinfobot) to get your numeric chat ID
+
+---
+
 ## Data Export
 
 Settings → Export Data as JSON — downloads a full JSON dump of your motorcycle profile, maintenance items, and all log entries.
 
-## Updating
-
-```bash
-docker compose pull
-docker compose up --build -d
-```
-
-Your database persists in a Docker named volume (`db_data`) and survives container rebuilds.
+---
 
 ## Development
 
@@ -105,6 +119,8 @@ npm run dev
 # → App at http://localhost:5173
 # → /api/* proxied to http://localhost:8000
 ```
+
+---
 
 ## Maintenance Schedule Reference
 

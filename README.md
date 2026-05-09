@@ -77,6 +77,30 @@ Your database persists in a Docker named volume (`db_data`) and survives contain
 
 ---
 
+## Access Control (Cloudflare Access)
+
+By default anyone with your tunnel URL can use the app. Lock it to yourself using Cloudflare Access — it gates the entire hostname at the Cloudflare edge before requests reach your server. Free for a single user, no code or Docker changes needed.
+
+**In [Cloudflare Zero Trust](https://one.dash.cloudflare.com/) → Zero Trust:**
+
+1. **Settings → Authentication** — add an identity provider. Google is simplest (OAuth with your Google account).
+
+2. **Access → Applications → Add an application → Self-hosted**
+   - Application name: `Click125 Tracker`
+   - Application domain: `your-domain.com`
+   - Session duration: `1 month` (so your phone stays logged in)
+
+3. **Add a policy:**
+   - Policy name: `Owner only`
+   - Action: `Allow`
+   - Include rule: `Emails` → `your@email.com`
+
+4. Save.
+
+Anyone hitting the URL now sees a Cloudflare login page first. After you authenticate once on your phone, the session lasts a month before requiring re-auth.
+
+---
+
 ## Telegram Reminders
 
 The app checks daily at 7:00 AM (server time) and sends a message for any item that is:

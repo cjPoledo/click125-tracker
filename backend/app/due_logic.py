@@ -13,6 +13,7 @@ def compute_status(
     current_km: int,
     today: date,
     purchase_date: Optional[date] = None,
+    last_replace_log: Optional[MaintenanceLog] = None,
 ) -> str:
     statuses: list[str] = []
 
@@ -44,7 +45,7 @@ def compute_status(
                 statuses.append("ok")
 
     if item.replace_months is not None:
-        replace_d = replace_days_remaining(item, last_log, purchase_date, today)
+        replace_d = replace_days_remaining(item, last_replace_log, purchase_date, today)
         if replace_d is not None:
             if replace_d < 0:
                 statuses.append("overdue")
@@ -93,13 +94,13 @@ def days_remaining(
 
 def replace_days_remaining(
     item: MaintenanceItem,
-    last_log: Optional[MaintenanceLog],
+    last_replace_log: Optional[MaintenanceLog],
     purchase_date: Optional[date] = None,
     today: Optional[date] = None,
 ) -> Optional[int]:
     if item.replace_months is None:
         return None
-    baseline = last_log.done_date if last_log else purchase_date
+    baseline = last_replace_log.done_date if last_replace_log else purchase_date
     if baseline is None:
         return None
     if today is None:

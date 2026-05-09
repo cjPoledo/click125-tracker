@@ -28,6 +28,7 @@ class MaintenanceLog(SQLModel, table=True):
     done_at_km: int
     done_date: date
     notes: Optional[str] = None
+    log_type: str = Field(default="inspect")  # 'inspect' | 'replace'
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 

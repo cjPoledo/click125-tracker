@@ -55,7 +55,12 @@
           <a href="/log/{entry.id}" class="log-card card">
             <div class="log-top">
               <span class="log-item-name">{entry.item_name ?? 'Unknown'}</span>
-              <span class="log-km odometer">{entry.done_at_km.toLocaleString()} km</span>
+              <div class="log-right">
+                <span class="log-type-pill" class:log-type-replace={entry.log_type === 'replace'}>
+                  {entry.log_type === 'replace' ? 'R' : 'I'}
+                </span>
+                <span class="log-km odometer">{entry.done_at_km.toLocaleString()} km</span>
+              </div>
             </div>
             <div class="log-date">{formatDate(entry.done_date)}</div>
             {#if entry.notes}
@@ -84,7 +89,20 @@
 
   .log-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
   .log-item-name { font-size: var(--text-base); font-weight: 600; flex: 1; }
-  .log-km { font-size: var(--text-sm); color: var(--color-text-muted); flex-shrink: 0; }
+  .log-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .log-km { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+  .log-type-pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    font-size: 10px; font-weight: 700;
+    background: rgba(100, 116, 139, 0.15); color: #94a3b8;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  .log-type-pill.log-type-replace {
+    background: rgba(204, 0, 0, 0.15); color: var(--color-primary);
+  }
   .log-date { font-size: var(--text-sm); color: var(--color-text-muted); }
   .log-notes { font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 6px; font-style: italic; }
 </style>

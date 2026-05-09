@@ -42,9 +42,9 @@ export const api = {
     list: (page = 1) => request<{ total: number; page: number; page_size: number; items: LogEntry[] }>(`/api/log?page=${page}`),
     listByItem: (itemId: number) => request<LogEntry[]>(`/api/log?item_id=${itemId}`),
     get: (id: number) => request<LogEntry>(`/api/log/${id}`),
-    create: (data: { item_id: number; done_at_km: number; done_date: string; notes?: string }) =>
+    create: (data: { item_id: number; done_at_km: number; done_date: string; notes?: string; log_type?: string }) =>
       request<LogEntry>('/api/log', { method: 'POST', body: JSON.stringify(data) }),
-    update: (id: number, data: Partial<{ done_at_km: number; done_date: string; notes: string }>) =>
+    update: (id: number, data: Partial<{ done_at_km: number; done_date: string; notes: string; log_type: string }>) =>
       request<LogEntry>(`/api/log/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: number) => request<void>(`/api/log/${id}`, { method: 'DELETE' }),
   },

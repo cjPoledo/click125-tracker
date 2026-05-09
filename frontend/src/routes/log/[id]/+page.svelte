@@ -4,7 +4,7 @@
   import { onMount } from 'svelte';
   import { items, showToast } from '$lib/stores';
   import { api } from '$lib/api';
-  import type { LogEntry } from '$lib/types';
+  import type { LogEntry, LogType } from '$lib/types';
 
   let entry = $state<LogEntry | null>(null);
   let loading = $state(true);
@@ -16,6 +16,7 @@
   let editKm = $state('');
   let editDate = $state('');
   let editNotes = $state('');
+  let editLogType = $state<LogType>('inspect');
 
   const logId = $derived(parseInt($page.params.id, 10));
 
@@ -26,6 +27,7 @@
         editKm = String(entry.done_at_km);
         editDate = entry.done_date;
         editNotes = entry.notes ?? '';
+        editLogType = entry.log_type ?? 'inspect';
       }
     } catch {
       showToast('Entry not found', 'error');
@@ -43,6 +45,7 @@
         done_at_km: parseInt(editKm, 10),
         done_date: editDate,
         notes: editNotes.trim() || undefined,
+        log_type: editLogType,
       });
       entry = updated;
       const refreshed = await api.items.list();
@@ -98,6 +101,13 @@
         </div>
 
         <div class="detail-row">
+          <span class="detail-label">Action</span>
+          <span class="log-type-badge" class:badge-replace={entry.log_type === 'replace'}>
+            {entry.log_type === 'replace' ? 'Replaced' : 'Inspected'}
+          </span>
+        </div>
+        <div class="divider"></div>
+        <div class="detail-row">
           <span class="detail-label">Odometer</span>
           <span class="detail-value odometer">{entry.done_at_km.toLocaleString()} km</span>
         </div>
@@ -126,6 +136,24 @@
         <h2 style="font-size: var(--text-lg); font-weight: 600; margin-bottom: var(--space-md); color: var(--color-text-muted);">
           {entry.item_name}
         </h2>
+
+        <div class="form-group">
+          <span class="label">Action</span>
+          <div class="type-toggle">
+            <button
+              type="button"
+              class="toggle-btn"
+              class:active={editLogType === 'inspect'}
+              onclick={() => (editLogType = 'inspect')}
+            >Inspected</button>
+            <button
+              type="button"
+              class="toggle-btn toggle-replace"
+              class:active={editLogType === 'replace'}
+              onclick={() => (editLogType = 'replace')}
+            >Replaced</button>
+          </div>
+        </div>
 
         <div class="form-group">
           <label class="label" for="edit-km">Odometer at service (km)</label>
@@ -178,6 +206,35 @@
   .detail-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: var(--space-sm) 0; }
   .detail-label { font-size: var(--text-sm); color: var(--color-text-muted); }
   .detail-value { font-size: var(--text-base); font-weight: 500; text-align: right; }
+
+  .log-type-badge {
+    font-size: var(--text-xs); font-weight: 600;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    background: rgba(100, 116, 139, 0.15); color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  .log-type-badge.badge-replace {
+    background: rgba(204, 0, 0, 0.15); color: var(--color-primary);
+  }
+
+  .type-toggle {
+    display: grid; grid-template-columns: 1fr 1fr;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 3px; gap: 3px;
+  }
+  .toggle-btn {
+    min-height: 42px;
+    border-radius: calc(var(--radius-md) - 3px);
+    font-size: var(--text-sm); font-weight: 600;
+    color: var(--color-text-muted);
+    transition: background 150ms ease, color 150ms ease;
+    cursor: pointer;
+  }
+  .toggle-btn.active { background: var(--color-surface-raised); color: var(--color-text); }
+  .toggle-replace.active { background: rgba(204, 0, 0, 0.15); color: var(--color-primary); }
 
   .modal-overlay {
     position: fixed; inset: 0;

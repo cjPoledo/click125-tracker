@@ -26,7 +26,16 @@ def list_items(session: Session = Depends(get_session)):
             .order_by(MaintenanceLog.done_date.desc())
         ).first()
 
-        status = compute_status(item, last_log, current_km, today, purchase_date)
+        last_replace_log = None
+        if item.replace_months is not None:
+            last_replace_log = session.exec(
+                select(MaintenanceLog)
+                .where(MaintenanceLog.item_id == item.id)
+                .where(MaintenanceLog.log_type == "replace")
+                .order_by(MaintenanceLog.done_date.desc())
+            ).first()
+
+        status = compute_status(item, last_log, current_km, today, purchase_date, last_replace_log)
 
         result.append({
             "id": item.id,
@@ -42,7 +51,9 @@ def list_items(session: Session = Depends(get_session)):
             "last_log_id": last_log.id if last_log else None,
             "km_remaining": km_remaining(item, last_log, current_km, purchase_date),
             "days_remaining": days_remaining(item, last_log, today, purchase_date),
-            "replace_days_remaining": replace_days_remaining(item, last_log, purchase_date, today),
+            "replace_days_remaining": replace_days_remaining(item, last_replace_log, purchase_date, today),
+            "last_replace_date": str(last_replace_log.done_date) if last_replace_log else None,
+            "last_replace_km": last_replace_log.done_at_km if last_replace_log else None,
         })
 
     return result

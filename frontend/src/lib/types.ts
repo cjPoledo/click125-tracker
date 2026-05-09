@@ -1,4 +1,5 @@
 export type Status = 'ok' | 'due_soon' | 'overdue' | 'inspect';
+export type LogType = 'inspect' | 'replace';
 
 export interface Motorcycle {
   id: number;
@@ -26,6 +27,8 @@ export interface MaintenanceItem {
   km_remaining: number | null;
   days_remaining: number | null;
   replace_days_remaining: number | null;
+  last_replace_date: string | null;
+  last_replace_km: number | null;
 }
 
 export interface LogEntry {
@@ -35,6 +38,7 @@ export interface LogEntry {
   done_at_km: number;
   done_date: string;
   notes: string | null;
+  log_type: LogType;
   created_at: string | null;
 }
 

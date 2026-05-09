@@ -15,12 +15,14 @@ class LogCreate(BaseModel):
     done_at_km: int
     done_date: date
     notes: Optional[str] = None
+    log_type: str = "inspect"
 
 
 class LogUpdate(BaseModel):
     done_at_km: Optional[int] = None
     done_date: Optional[date] = None
     notes: Optional[str] = None
+    log_type: Optional[str] = None
 
 
 def log_with_item_name(log: MaintenanceLog, session: Session) -> dict:
@@ -32,6 +34,7 @@ def log_with_item_name(log: MaintenanceLog, session: Session) -> dict:
         "done_at_km": log.done_at_km,
         "done_date": str(log.done_date),
         "notes": log.notes,
+        "log_type": log.log_type,
         "created_at": log.created_at.isoformat() if log.created_at else None,
     }
 

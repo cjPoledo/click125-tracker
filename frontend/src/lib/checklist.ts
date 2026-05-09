@@ -6,14 +6,14 @@ export interface ChecklistItem {
 const ITEMS: ChecklistItem[] = [
   { title: 'Fuel',               description: 'Check fuel level; refuel before riding if low.' },
   { title: 'Throttle',           description: 'Confirm throttle opens smoothly and snaps fully closed in all steering positions.' },
-  { title: 'Engine oil',         description: 'Check oil level via sight glass on right crankcase; top up if needed.' },
+  { title: 'Engine oil',         description: 'Check oil level on the dipstick (right side of engine); top up with 10W-30 MB oil if below upper mark. Check for leaks.' },
   { title: 'Coolant',            description: 'Check coolant level in reserve tank; top up with Honda Pre-Mix Coolant if low.' },
-  { title: 'Brake fluid',        description: 'Check brake fluid level in reservoir; top up with DOT 3 or DOT 4 if low.' },
-  { title: 'Brake pads / shoes', description: 'Check brake pad and shoe wear; replace if at or near the wear indicator.' },
-  { title: 'Brake system',       description: 'Check lever and pedal travel and feel; confirm rear brake lock engages and releases fully.' },
+  { title: 'Brake fluid',        description: 'Verify fluid is above the LWR mark. If low, check pad wear first — if pads are fine, you likely have a leak; see your dealer.' },
+  { title: 'Brake pads / shoes', description: 'Front: inspect pads through the caliper port; replace if worn to the indicator. Rear: apply brake — if the arrow on the brake arm aligns with the reference mark on the panel, shoes must be replaced.' },
+  { title: 'Brake system',       description: 'Check brake lever and pedal feel. Rear brake lever freeplay should be 10–20 mm; adjust if needed. Confirm brake lock lever engages and releases cleanly.' },
   { title: 'Lights & horn',      description: 'Check headlight (high/low), tail light, brake light, turn signals, and horn.' },
-  { title: 'Side stand',         description: 'Confirm stand retracts fully and the engine cut-off switch works.' },
-  { title: 'Tyres',              description: 'Check for cuts, cracks, or embedded objects; verify cold pressure (F: 200 kPa / 29 psi · R: 225 kPa / 33 psi).' },
+  { title: 'Side stand',         description: 'Confirm stand spring is intact and stand retracts fully. Test cut-off: start engine, then lower stand — the engine must stop.' },
+  { title: 'Tyres',              description: 'Check for cuts, cracks, embedded objects, and unusual bulges in the sidewalls. Verify cold tyre pressure (F: 200 kPa / 29 psi · R: 225 kPa / 33 psi) and check tread wear indicators.' },
 ];
 
 function todayKey(): string {

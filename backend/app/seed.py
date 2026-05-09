@@ -11,7 +11,7 @@ ITEMS = [
     {
         "name": "Engine Oil Change",
         "interval_km": 6000, "interval_months": 12, "replace_months": None,
-        "notes": "Replace engine oil. Use JASO T903 MB, SAE 10W-30, API SJ or higher. First change at 1,000 km, then every 6,000 km or 12 months — whichever comes first. Reset the OIL CHANGE indicator on the dashboard after every change.",
+        "notes": "Replace engine oil. Use JASO T903 MB, SAE 10W-30, API SJ or higher. Avoid oils marked 'Energy Conserving' or 'Resource Conserving' on the API service symbol. First change at 1,000 km, then every 6,000 km or 12 months — whichever comes first. Reset the OIL CHANGE indicator on the dashboard after every change.",
         "maintenance_level": "Standard",
     },
     {
@@ -41,7 +41,7 @@ ITEMS = [
     {
         "name": "Throttle Operation",
         "interval_km": 6000, "interval_months": 12, "replace_months": None,
-        "notes": "Check that the throttle opens smoothly and snaps fully closed in all steering positions. Also check freeplay. Every 6,000 km or annually — whichever comes first.",
+        "notes": "Check that the throttle opens smoothly and snaps fully closed in all steering positions. Freeplay at throttle grip flange: 2–6 mm (0.1–0.2 in). Every 6,000 km or annually — whichever comes first.",
         "maintenance_level": "Intermediate",
     },
     {
@@ -65,7 +65,7 @@ ITEMS = [
     {
         "name": "Radiator Coolant",
         "interval_km": 12000, "interval_months": 12, "replace_months": 36,
-        "notes": "Inspect coolant level and condition every 12,000 km and annually. Replace every 3 years — use Honda Pre-Mix Coolant only, do not dilute with water.",
+        "notes": "Inspect coolant level and condition every 12,000 km and annually. Replace every 3 years using Honda Pre-Mix Coolant only — do not dilute with water. Replacement requires mechanical skill (*4) — dealer recommended.",
         "maintenance_level": "Standard",
     },
     {
@@ -77,7 +77,7 @@ ITEMS = [
     {
         "name": "Brake Fluid",
         "interval_km": 6000, "interval_months": 12, "replace_months": 24,
-        "notes": "Inspect brake fluid level and condition every 6,000 km and annually. Replace every 2 years — brake fluid absorbs moisture over time, reducing braking effectiveness. Use Honda DOT 3 or DOT 4.",
+        "notes": "Inspect brake fluid level and condition every 6,000 km and annually. Replace every 2 years — brake fluid absorbs moisture over time, reducing braking effectiveness. Use Honda DOT 3 or DOT 4. Replacement requires mechanical skill (*4) — dealer recommended.",
         "maintenance_level": "Standard",
     },
     {
@@ -89,7 +89,7 @@ ITEMS = [
     {
         "name": "Rear Brake Shoes",
         "interval_km": 6000, "interval_months": 12, "replace_months": None,
-        "notes": "Inspect brake shoe thickness and check lever freeplay every 6,000 km or annually; adjust if necessary.",
+        "notes": "Check brake shoe wear indicator: with the brake fully applied, if the arrow on the brake arm aligns with the reference mark on the brake panel, shoes must be replaced. Check rear brake lever freeplay (10–20 mm); adjust if necessary. Every 6,000 km or annually.",
         "maintenance_level": "Standard",
     },
     {
@@ -119,7 +119,7 @@ ITEMS = [
     {
         "name": "Side Stand",
         "interval_km": 6000, "interval_months": 12, "replace_months": None,
-        "notes": "Inspect the side stand spring and ignition cut-off function every 6,000 km and annually. The engine must not start when the side stand is down.",
+        "notes": "Inspect the side stand spring for damage or loss of tension. Test the ignition cut-off: with the engine running, lower the side stand — the engine must stop. If it doesn't, see your dealer. Every 6,000 km or annually.",
         "maintenance_level": "Standard",
     },
     {

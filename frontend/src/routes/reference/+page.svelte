@@ -143,9 +143,6 @@
           <li>Repeat all scheduled maintenance at the same frequency once the odometer exceeds 36,000 km.</li>
           <li><em>Air Cleaner:</em> Service more frequently when riding in unusually wet or dusty conditions.</li>
           <li><em>Crankcase Breather:</em> Service more frequently when riding in rain, at full throttle, or after washing or overturning the vehicle.</li>
-          <li><em>Radiator Coolant:</em> First replacement at 3 years; every 2 years thereafter.</li>
-          <li><em>Final Drive Oil:</em> Replacement every 2 years — dealer recommended.</li>
-          <li><em>Brake Fluid:</em> Replacement every 2 years — dealer recommended.</li>
         </ul>
 
         <p class="notes-heading" style="margin-top: var(--space-md);">Maintenance level</p>

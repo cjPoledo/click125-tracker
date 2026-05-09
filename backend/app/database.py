@@ -25,6 +25,7 @@ def _migrate_add_columns():
     migrations = [
         ("maintenanceitem", "replace_months", "INTEGER"),
         ("motorcycle", "purchase_date", "DATE"),
+        ("maintenancelog", "log_type", "TEXT NOT NULL DEFAULT 'inspect'"),
     ]
     with engine.connect() as conn:
         for table, column, col_type in migrations:
@@ -37,6 +38,24 @@ def _migrate_add_columns():
                 conn.commit()
             except Exception:
                 pass  # column already exists
+
+        # Backfill: replace-only items (no interval_km, no interval_months)
+        # have every log as a replacement by definition.
+        try:
+            conn.execute(
+                __import__("sqlalchemy").text("""
+                    UPDATE maintenancelog
+                    SET log_type = 'replace'
+                    WHERE log_type = 'inspect'
+                      AND item_id IN (
+                        SELECT id FROM maintenanceitem
+                        WHERE interval_km IS NULL AND interval_months IS NULL
+                      )
+                """)
+            )
+            conn.commit()
+        except Exception:
+            pass
 
 
 def get_session():

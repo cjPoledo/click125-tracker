@@ -50,10 +50,8 @@
 
   function intervalExtra(name: string): string | null {
     if (name === 'Engine Oil Change') return 'First change at 1,000 km.';
-    if (name === 'Radiator Coolant') return 'Replace every 3 years.';
     if (name === 'Spark Plug') return 'Inspect at 6,000 km; replace at 12,000 km — alternating every 6,000 km.';
     if (name === 'Drive Belt') return 'Inspect at 12,000 km; replace at 24,000 km — alternating every 12,000 km.';
-    if (name === 'Brake Fluid') return 'Replace every 2 years regardless of inspection result.';
     if (name === 'Engine Idle Speed') return 'Also check at 1,000 km.';
     if (name === 'Brake System') return 'Also check at 1,000 km.';
     if (name === 'Nuts & Bolts') return 'Also check at 1,000 km.';
@@ -166,6 +164,17 @@
               </span>
             </div>
           {/if}
+          {#if item.replace_months !== null && item.last_replace_date}
+            <div class="status-cell">
+              <span class="cell-label">Last replaced</span>
+              <span class="cell-value">
+                {item.last_replace_date}
+                {#if item.last_replace_km !== null}
+                  · <span class="odometer">{item.last_replace_km.toLocaleString()} km</span>
+                {/if}
+              </span>
+            </div>
+          {/if}
         </div>
       </section>
 
@@ -190,7 +199,12 @@
               <li class="history-entry">
                 <div class="history-top">
                   <span class="history-date">{entry.done_date}</span>
-                  <span class="history-km odometer">{entry.done_at_km.toLocaleString()} km</span>
+                  <div class="history-right">
+                    <span class="log-type-pill" class:log-type-replace={entry.log_type === 'replace'}>
+                      {entry.log_type === 'replace' ? 'Replaced' : 'Inspected'}
+                    </span>
+                    <span class="history-km odometer">{entry.done_at_km.toLocaleString()} km</span>
+                  </div>
                 </div>
                 {#if entry.notes}
                   <p class="history-notes">{entry.notes}</p>
@@ -379,9 +393,22 @@
     margin-bottom: 2px;
   }
 
-  .history-date { font-size: var(--text-sm); color: var(--color-text); font-weight: 500; }
-  .history-km   { font-size: var(--text-sm); color: var(--color-text-muted); }
+  .history-date  { font-size: var(--text-sm); color: var(--color-text); font-weight: 500; }
+  .history-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .history-km    { font-size: var(--text-sm); color: var(--color-text-muted); }
   .history-notes { font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 4px; }
+
+  .log-type-pill {
+    font-size: 10px; font-weight: 600;
+    padding: 2px 7px;
+    border-radius: var(--radius-full);
+    background: rgba(100, 116, 139, 0.15); color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .log-type-pill.log-type-replace {
+    background: rgba(204, 0, 0, 0.15); color: var(--color-primary);
+  }
 
   /* Footer */
   .drawer-footer {

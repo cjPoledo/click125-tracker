@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app/ app/
 COPY migrate_schedule.py .
 COPY migrate_intervals.py .
+COPY migrate_levels.py .
 
 RUN mkdir -p data
 

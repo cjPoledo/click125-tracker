@@ -33,6 +33,7 @@ def list_items(session: Session = Depends(get_session)):
             "interval_km": item.interval_km,
             "interval_months": item.interval_months,
             "notes": item.notes,
+            "maintenance_level": item.maintenance_level,
             "status": status,
             "last_done_km": last_log.done_at_km if last_log else None,
             "last_done_date": str(last_log.done_date) if last_log else None,

@@ -17,6 +17,7 @@ class MaintenanceItem(SQLModel, table=True):
     interval_km: Optional[int] = None
     interval_months: Optional[int] = None
     notes: Optional[str] = None
+    maintenance_level: Optional[str] = None
 
 
 class MaintenanceLog(SQLModel, table=True):

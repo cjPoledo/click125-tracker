@@ -8,12 +8,15 @@ export interface Motorcycle {
   last_odometer_update: string | null;
 }
 
+export type MaintenanceLevel = 'Standard' | 'Intermediate' | 'Technical';
+
 export interface MaintenanceItem {
   id: number;
   name: string;
   interval_km: number | null;
   interval_months: number | null;
   notes: string | null;
+  maintenance_level: MaintenanceLevel | null;
   status: Status;
   last_done_km: number | null;
   last_done_date: string | null;

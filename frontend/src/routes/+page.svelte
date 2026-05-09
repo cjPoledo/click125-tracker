@@ -112,7 +112,12 @@
         <div class="item-card card card--{item.status}">
           <div class="item-top">
             <span class="item-name">{item.name}</span>
-            <StatusBadge status={item.status} />
+            <div class="item-badges">
+              {#if item.maintenance_level}
+                <span class="level-pill level-{item.maintenance_level.toLowerCase()}" title="{item.maintenance_level}">{item.maintenance_level === 'Intermediate' ? 'INT' : item.maintenance_level === 'Technical' ? 'TECH' : 'STD'}</span>
+              {/if}
+              <StatusBadge status={item.status} />
+            </div>
           </div>
           <div class="item-meta">
             {#if item.last_done_date}
@@ -223,6 +228,19 @@
   .item-card { cursor: default; }
   .item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
   .item-name { font-size: var(--text-base); font-weight: 600; flex: 1; }
+  .item-badges { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .level-pill {
+    display: inline-block;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  .level-standard     { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+  .level-intermediate { background: rgba(245, 158, 11, 0.15);  color: #fbbf24; }
+  .level-technical    { background: rgba(239, 68, 68, 0.15);   color: #f87171; }
   .item-meta { font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: 4px; }
   .item-remaining { font-size: var(--text-sm); font-weight: 500; }
   .item-notes { font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 6px; font-style: italic; }

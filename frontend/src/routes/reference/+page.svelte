@@ -3,41 +3,44 @@
 <script lang="ts">
   const COLS = ['Pre-ride', '1k km', '6k km', '12k km', '18k km', '24k km', '30k km', '36k km', 'Annual', 'Replace'];
 
+  type Level = 'Standard' | 'Intermediate' | 'Technical';
+
   // ● = Inspect   ■ = Replace   '' = N/A
   // Columns: [pre, 1k, 6k, 12k, 18k, 24k, 30k, 36k, annual, replace]
-  const ROWS: { name: string; cells: string[] }[] = [
-    { name: 'Fuel Line',                  cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
-    { name: 'Fuel Level',                 cells: ['●', '',  '',  '',  '',  '',  '',  '',  '',  ''] },
-    { name: 'Throttle Operation',         cells: ['●', '',  '●', '●', '●', '●', '●', '●', '',  ''] },
-    { name: 'Air Cleaner',                cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
-    { name: 'Crankcase Breather',         cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
-    { name: 'Spark Plug',                 cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
-    { name: 'Valve Clearance',            cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
-    { name: 'Engine Oil',                 cells: ['',  '■', '■', '■', '■', '■', '■', '■', '',  ''] },
-    { name: 'Engine Oil Strainer Screen', cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
-    { name: 'Engine Idle Speed',          cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
-    { name: 'Radiator Coolant',           cells: ['',  '',  '',  '',  '',  '',  '',  '',  '',  '3 yr / 2 yr'] },
-    { name: 'Cooling System',             cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
-    { name: 'Drive Belt',                 cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
-    { name: 'Final Drive Oil',            cells: ['',  '',  '',  '',  '',  '',  '',  '',  '',  '2 yr'] },
-    { name: 'Brake Fluid',                cells: ['',  '',  '',  '',  '',  '',  '',  '',  '',  '2 yr'] },
-    { name: 'Brake Shoes / Pads Wear',    cells: ['●', '',  '●', '●', '●', '●', '●', '●', '',  ''] },
-    { name: 'Brake System',               cells: ['●', '',  '',  '',  '',  '',  '',  '',  '●', ''] },
-    { name: 'Brake Lock Operation',       cells: ['●', '',  '',  '',  '',  '',  '',  '',  '',  ''] },
-    { name: 'Headlight Aim',              cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
-    { name: 'Lights & Horn',              cells: ['●', '',  '',  '',  '',  '',  '',  '',  '',  ''] },
-    { name: 'Clutch Shoes Wear',          cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
-    { name: 'Side Stand',                 cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
-    { name: 'Suspension',                 cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
-    { name: 'Nuts, Bolts & Fasteners',    cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
-    { name: 'Wheels & Tyres',             cells: ['●', '',  '',  '',  '',  '',  '',  '',  '●', ''] },
-    { name: 'Steering Head Bearings',     cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
+  const ROWS: { name: string; level: Level; cells: string[] }[] = [
+    { name: 'Fuel Line',                  level: 'Technical',    cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
+    { name: 'Fuel Level',                 level: 'Standard',     cells: ['●', '',  '',  '',  '',  '',  '',  '',  '',  ''] },
+    { name: 'Throttle Operation',         level: 'Standard',     cells: ['●', '',  '●', '●', '●', '●', '●', '●', '',  ''] },
+    { name: 'Air Cleaner',                level: 'Technical',    cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
+    { name: 'Crankcase Breather',         level: 'Intermediate', cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
+    { name: 'Spark Plug',                 level: 'Intermediate', cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
+    { name: 'Valve Clearance',            level: 'Technical',    cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
+    { name: 'Engine Oil',                 level: 'Standard',     cells: ['',  '■', '■', '■', '■', '■', '■', '■', '',  ''] },
+    { name: 'Engine Oil Strainer Screen', level: 'Intermediate', cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
+    { name: 'Engine Idle Speed',          level: 'Intermediate', cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
+    { name: 'Radiator Coolant',           level: 'Technical',    cells: ['',  '',  '',  '',  '',  '',  '',  '',  '',  '3 yr / 2 yr'] },
+    { name: 'Cooling System',             level: 'Intermediate', cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
+    { name: 'Drive Belt',                 level: 'Technical',    cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
+    { name: 'Final Drive Oil',            level: 'Technical',    cells: ['',  '',  '',  '',  '',  '',  '',  '',  '',  '2 yr'] },
+    { name: 'Brake Fluid',                level: 'Technical',    cells: ['',  '',  '',  '',  '',  '',  '',  '',  '',  '2 yr'] },
+    { name: 'Brake Shoes / Pads Wear',    level: 'Standard',     cells: ['●', '',  '●', '●', '●', '●', '●', '●', '',  ''] },
+    { name: 'Brake System',               level: 'Standard',     cells: ['●', '',  '',  '',  '',  '',  '',  '',  '●', ''] },
+    { name: 'Brake Lock Operation',       level: 'Standard',     cells: ['●', '',  '',  '',  '',  '',  '',  '',  '',  ''] },
+    { name: 'Headlight Aim',              level: 'Intermediate', cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
+    { name: 'Lights & Horn',              level: 'Standard',     cells: ['●', '',  '',  '',  '',  '',  '',  '',  '',  ''] },
+    { name: 'Clutch Shoes Wear',          level: 'Technical',    cells: ['',  '',  '',  '',  '',  '',  '',  '',  '●', ''] },
+    { name: 'Side Stand',                 level: 'Standard',     cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
+    { name: 'Suspension',                 level: 'Intermediate', cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
+    { name: 'Nuts, Bolts & Fasteners',    level: 'Standard',     cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
+    { name: 'Wheels & Tyres',             level: 'Standard',     cells: ['●', '',  '',  '',  '',  '',  '',  '',  '●', ''] },
+    { name: 'Steering Head Bearings',     level: 'Technical',    cells: ['',  '',  '',  '●', '',  '●', '',  '●', '',  ''] },
   ];
 
-  const DEALER_ITEMS = new Set([
-    'Valve Clearance', 'Air Cleaner', 'Crankcase Breather',
-    'Final Drive Oil', 'Brake Fluid', 'Radiator Coolant', 'Steering Head Bearings',
-  ]);
+  const LEVEL_LABEL: Record<Level, string> = {
+    Standard:     'STD',
+    Intermediate: 'INT',
+    Technical:    'TECH',
+  };
 </script>
 
 <div class="page">
@@ -56,6 +59,7 @@
           <thead>
             <tr>
               <th class="col-item sticky-col">Item</th>
+              <th class="col-level">Level</th>
               {#each COLS as col}
                 <th class="col-data">{col}</th>
               {/each}
@@ -63,12 +67,13 @@
           </thead>
           <tbody>
             {#each ROWS as row}
-              <tr class:dealer-row={DEALER_ITEMS.has(row.name)}>
-                <td class="col-item sticky-col">
-                  {row.name}
-                  {#if DEALER_ITEMS.has(row.name)}
-                    <span class="dealer-dot" title="Dealer service recommended">🔴</span>
-                  {/if}
+              <tr>
+                <td class="col-item sticky-col">{row.name}</td>
+                <td class="col-level">
+                  <span
+                    class="level-badge level-{row.level.toLowerCase()}"
+                    title="{row.level}"
+                  >{LEVEL_LABEL[row.level]}</span>
                 </td>
                 {#each row.cells as cell}
                   <td class="col-data" class:cell-filled={cell !== ''} class:cell-replace={cell !== '●' && cell !== '■' && cell !== ''}>
@@ -83,9 +88,12 @@
 
       <!-- Legend -->
       <div class="legend">
-        <span class="legend-item"><span class="sym">●</span> Inspect (clean, adjust, lubricate, or replace if necessary)</span>
+        <span class="legend-item"><span class="sym">●</span> Inspect</span>
         <span class="legend-item"><span class="sym">■</span> Replace</span>
-        <span class="legend-item"><span class="sym empty">—</span> Not applicable</span>
+        <span class="legend-divider"></span>
+        <span class="legend-item"><span class="level-badge level-standard">STD</span> Owner serviceable</span>
+        <span class="legend-item"><span class="level-badge level-intermediate">INT</span> Dealer recommended</span>
+        <span class="legend-item"><span class="level-badge level-technical">TECH</span> Dealer required</span>
       </div>
     </section>
 
@@ -105,13 +113,13 @@
 
         <p class="notes-heading" style="margin-top: var(--space-md);">Maintenance level</p>
         <ul class="notes-list">
-          <li>🔵 <strong>Standard</strong> — Owner can perform with proper tools and mechanical skill.</li>
-          <li>🟡 <strong>Intermediate</strong> — Dealer service recommended; procedures in Honda Shop Manual.</li>
-          <li>🔴 <strong>Technical</strong> — Dealer service required for safety.</li>
+          <li><span class="level-badge level-standard">STD</span> <strong>Standard</strong> — Owner can perform at home with proper tools and mechanical skill.</li>
+          <li><span class="level-badge level-intermediate">INT</span> <strong>Intermediate</strong> — Possible with Honda Shop Manual, but dealer service is recommended.</li>
+          <li><span class="level-badge level-technical">TECH</span> <strong>Technical</strong> — Dealer service required for safety — do not attempt at home.</li>
         </ul>
 
-        <p class="notes-heading" style="margin-top: var(--space-md);">Items requiring dealer service (🔴 Technical)</p>
-        <p class="dealer-list">Valve Clearance · Air Cleaner · Crankcase Breather · Final Drive Oil · Brake Fluid · Radiator Coolant · Steering Head Bearings</p>
+        <p class="notes-heading" style="margin-top: var(--space-md);">Technical items (dealer required)</p>
+        <p class="dealer-list">Fuel Line · Valve Clearance · Air Cleaner · Radiator Coolant · Drive Belt · Final Drive Oil · Brake Fluid · Clutch Shoes Wear · Steering Head Bearings</p>
       </div>
     </section>
 
@@ -253,25 +261,49 @@
     color: var(--color-primary);
   }
 
-  .dealer-row .col-item { color: var(--color-text); }
-
-  .dealer-dot {
-    font-size: 9px;
-    margin-left: 4px;
-    vertical-align: middle;
+  /* Level column */
+  .col-level {
+    text-align: center;
+    min-width: 52px;
+    padding: 7px 6px;
+    border-right: 1px solid var(--color-border);
   }
+
+  /* Level badges */
+  .level-badge {
+    display: inline-block;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  .level-standard     { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+  .level-intermediate { background: rgba(245, 158, 11, 0.15);  color: #fbbf24; }
+  .level-technical    { background: rgba(239, 68, 68, 0.15);   color: #f87171; }
 
   /* Legend */
   .legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px 16px;
+    gap: 6px 14px;
     margin-top: var(--space-sm);
     font-size: 11px;
     color: var(--color-text-muted);
+    align-items: center;
   }
 
   .legend-item { display: flex; align-items: center; gap: 6px; }
+
+  .legend-divider {
+    width: 1px;
+    height: 14px;
+    background: var(--color-border);
+    margin: 0 2px;
+  }
 
   .sym {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
@@ -309,9 +341,15 @@
     line-height: 1.5;
   }
 
-  .notes-list li::before {
+  .notes-list li:not(:has(.level-badge))::before {
     content: '– ';
     color: var(--color-text-muted);
+  }
+
+  .notes-list li:has(.level-badge) {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
   }
 
   .dealer-list {

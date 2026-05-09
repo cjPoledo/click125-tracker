@@ -1,0 +1,31 @@
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: sqlite:////app/data/click125.db
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-*}
+    volumes:
+      - db_data:/app/data
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  db_data:

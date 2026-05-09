@@ -65,7 +65,7 @@ ITEMS = [
     {
         "name": "Radiator Coolant",
         "interval_km": 12000, "interval_months": 12, "replace_months": 36,
-        "notes": "Inspect coolant level and condition every 12,000 km and annually. Replace at 3 years initially, then every 2 years thereafter — use Honda Pre-Mix Coolant only, do not dilute with water.",
+        "notes": "Inspect coolant level and condition every 12,000 km and annually. Replace every 3 years — use Honda Pre-Mix Coolant only, do not dilute with water.",
         "maintenance_level": "Standard",
     },
     {

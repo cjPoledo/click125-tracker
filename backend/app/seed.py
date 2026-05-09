@@ -23,7 +23,7 @@ ITEMS = [
     {
         "name": "Spark Plug",
         "interval_km": 6000, "interval_months": None, "replace_months": None,
-        "notes": "Inspect electrode gap and condition every 6,000 km; replace every 12,000 km. Replace earlier if worn, fouled, or damaged.",
+        "notes": "Service every 6,000 km — inspect at odd intervals (6k, 18k, 30k), replace at even intervals (12k, 24k, 36k). Replace earlier if worn, fouled, or damaged.",
         "maintenance_level": "Standard",
     },
     {
@@ -65,7 +65,7 @@ ITEMS = [
     {
         "name": "Radiator Coolant",
         "interval_km": 12000, "interval_months": 12, "replace_months": 36,
-        "notes": "Inspect coolant level and condition every 12,000 km and annually. Replace every 3 years with Honda Pre-Mix Coolant only — do not dilute with water.",
+        "notes": "Inspect coolant level and condition every 12,000 km and annually. Replace at 3 years initially, then every 2 years thereafter — use Honda Pre-Mix Coolant only, do not dilute with water.",
         "maintenance_level": "Standard",
     },
     {
@@ -149,7 +149,7 @@ ITEMS = [
     {
         "name": "Drive Belt",
         "interval_km": 12000, "interval_months": None, "replace_months": None,
-        "notes": "Inspect CVT drive belt for cracks, fraying, and wear every 12,000 km; replace every 24,000 km. Dealer service — requires CVT case removal.",
+        "notes": "Service every 12,000 km — inspect at 12k intervals, replace at 24k intervals (alternating I/R). Dealer service — requires CVT case removal.",
         "maintenance_level": "Intermediate",
     },
     {

@@ -51,8 +51,8 @@
   function intervalExtra(name: string): string | null {
     if (name === 'Engine Oil Change') return 'First change at 1,000 km.';
     if (name === 'Radiator Coolant') return 'First replacement at 3 years; every 2 years thereafter.';
-    if (name === 'Spark Plug') return 'Inspect every 6,000 km; replace every 12,000 km.';
-    if (name === 'Drive Belt') return 'Inspect every 12,000 km; replace every 24,000 km.';
+    if (name === 'Spark Plug') return 'Inspect at 6,000 km; replace at 12,000 km — alternating every 6,000 km.';
+    if (name === 'Drive Belt') return 'Inspect at 12,000 km; replace at 24,000 km — alternating every 12,000 km.';
     if (name === 'Brake Fluid') return 'Replace every 2 years regardless of inspection result.';
     if (name === 'Engine Idle Speed') return 'Also check at 1,000 km.';
     if (name === 'Brake System') return 'Also check at 1,000 km.';

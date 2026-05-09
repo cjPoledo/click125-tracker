@@ -183,7 +183,8 @@
   }
 
   .sched-table {
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     font-size: 11px;
     width: max-content;
     min-width: 100%;
@@ -230,7 +231,7 @@
     position: sticky;
     left: 0;
     z-index: 2;
-    background: var(--color-bg);
+    background: var(--color-background);
     border-right: 1px solid var(--color-border);
   }
 

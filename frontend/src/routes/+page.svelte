@@ -126,13 +126,19 @@
               <span style="color: var(--color-text-muted);">Never serviced</span>
             {/if}
           </div>
-          {#if item.km_remaining !== null}
+          {#if item.km_remaining !== null || item.days_remaining !== null || item.replace_days_remaining !== null}
             <div class="item-remaining" style="color: {item.status === 'ok' ? 'var(--color-text-muted)' : item.status === 'due_soon' ? 'var(--color-due-soon)' : 'var(--color-overdue)'};">
-              {item.km_remaining >= 0 ? `${item.km_remaining.toLocaleString()} km remaining` : `${Math.abs(item.km_remaining).toLocaleString()} km overdue`}
-            </div>
-          {:else if item.days_remaining !== null}
-            <div class="item-remaining" style="color: {item.status === 'ok' ? 'var(--color-text-muted)' : item.status === 'due_soon' ? 'var(--color-due-soon)' : 'var(--color-overdue)'};">
-              {item.days_remaining >= 0 ? `${item.days_remaining} days remaining` : `${Math.abs(item.days_remaining)} days overdue`}
+              {[
+                item.km_remaining !== null
+                  ? (item.km_remaining >= 0 ? `${item.km_remaining.toLocaleString()} km remaining` : `${Math.abs(item.km_remaining).toLocaleString()} km overdue`)
+                  : null,
+                item.days_remaining !== null
+                  ? (item.days_remaining >= 0 ? `inspect in ${item.days_remaining} days` : `${Math.abs(item.days_remaining)} days overdue`)
+                  : null,
+                item.replace_days_remaining !== null
+                  ? (item.replace_days_remaining >= 0 ? `replace in ${item.replace_days_remaining} days` : `replace ${Math.abs(item.replace_days_remaining)} days overdue`)
+                  : null,
+              ].filter(Boolean).join(' · ')}
             </div>
           {/if}
           {#if item.notes}

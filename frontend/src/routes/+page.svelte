@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
-  import { motorcycle, items, showToast } from '$lib/stores';
+  import { motorcycle, items, selectedItem, showToast } from '$lib/stores';
   import { api } from '$lib/api';
-  import type { Status } from '$lib/types';
+  import type { MaintenanceItem, Status } from '$lib/types';
 
   let showOdometerModal = $state(false);
   let newOdometer = $state('');
@@ -109,7 +109,7 @@
     <!-- Items list -->
     <div class="items-list">
       {#each sortedItems as item (item.id)}
-        <div class="item-card card card--{item.status}">
+        <button class="item-card card card--{item.status}" onclick={() => selectedItem.set(item)}>
           <div class="item-top">
             <span class="item-name">{item.name}</span>
             <div class="item-badges">
@@ -138,7 +138,7 @@
           {#if item.notes}
             <div class="item-notes">{item.notes}</div>
           {/if}
-        </div>
+        </button>
       {/each}
 
       {#if $items.length === 0}
@@ -225,7 +225,14 @@
 
   .items-list { display: flex; flex-direction: column; gap: var(--space-sm); }
 
-  .item-card { cursor: default; }
+  .item-card {
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    color: inherit;
+    font: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
   .item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
   .item-name { font-size: var(--text-base); font-weight: 600; flex: 1; }
   .item-badges { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }

@@ -1,9 +1,45 @@
 <svelte:head><title>Maintenance Schedule — Click125 Tracker</title></svelte:head>
 
 <script lang="ts">
+  import { items, selectedItem } from '$lib/stores';
+
   const COLS = ['Pre-ride', '1k km', '6k km', '12k km', '18k km', '24k km', '30k km', '36k km', 'Annual', 'Replace'];
 
   type Level = 'Standard' | 'Intermediate' | 'Technical';
+
+  // Row name → DB item name mapping (only rows that have a matching DB item)
+  const NAME_MAP: Record<string, string> = {
+    'Fuel Line':                  'Fuel Line',
+    'Throttle Operation':         'Throttle Operation',
+    'Air Cleaner':                'Air Cleaner Element',
+    'Crankcase Breather':         'Crankcase Breather',
+    'Spark Plug':                 'Spark Plug',
+    'Valve Clearance':            'Valve Clearance',
+    'Engine Oil':                 'Engine Oil Change',
+    'Engine Oil Strainer Screen': 'Engine Oil Strainer Screen',
+    'Engine Idle Speed':          'Engine Idle Speed',
+    'Radiator Coolant':           'Radiator Coolant',
+    'Cooling System':             'Cooling System',
+    'Drive Belt':                 'Drive Belt',
+    'Final Drive Oil':            'Final Drive Oil',
+    'Brake Fluid':                'Brake Fluid',
+    'Brake System':               'Brake System',
+    'Brake Lock Operation':       'Brake Lock Operation',
+    'Headlight Aim':              'Headlight Aim',
+    'Clutch Shoes Wear':          'Clutch Shoes Wear',
+    'Side Stand':                 'Side Stand',
+    'Suspension':                 'Suspension',
+    'Nuts, Bolts & Fasteners':    'Nuts & Bolts',
+    'Wheels & Tyres':             'Wheels & Tyres',
+    'Steering Head Bearings':     'Steering Head Bearings',
+  };
+
+  function openDrawer(rowName: string) {
+    const dbName = NAME_MAP[rowName];
+    if (!dbName) return;
+    const found = $items.find(i => i.name === dbName);
+    if (found) selectedItem.set(found);
+  }
 
   // ● = Inspect   ■ = Replace   '' = N/A
   // Columns: [pre, 1k, 6k, 12k, 18k, 24k, 30k, 36k, annual, replace]
@@ -67,7 +103,7 @@
           </thead>
           <tbody>
             {#each ROWS as row}
-              <tr>
+              <tr class:row-tappable={NAME_MAP[row.name]} onclick={() => openDrawer(row.name)}>
                 <td class="col-item sticky-col">{row.name}</td>
                 <td class="col-level">
                   <span
@@ -217,6 +253,8 @@
   .sched-table tbody tr:last-child td { border-bottom: none; }
 
   .sched-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+  .row-tappable { cursor: pointer; }
+  .row-tappable:active { background: rgba(255,255,255,0.06); }
 
   .col-item {
     text-align: left;

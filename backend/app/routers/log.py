@@ -40,8 +40,17 @@ def log_with_item_name(log: MaintenanceLog, session: Session) -> dict:
 def list_log(
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=50, ge=1, le=200),
+    item_id: Optional[int] = Query(default=None),
     session: Session = Depends(get_session),
 ):
+    if item_id is not None:
+        logs = session.exec(
+            select(MaintenanceLog)
+            .where(MaintenanceLog.item_id == item_id)
+            .order_by(MaintenanceLog.done_date.desc(), MaintenanceLog.id.desc())
+        ).all()
+        return [log_with_item_name(log, session) for log in logs]
+
     total = session.exec(select(func.count()).select_from(MaintenanceLog)).one()
     logs = session.exec(
         select(MaintenanceLog)

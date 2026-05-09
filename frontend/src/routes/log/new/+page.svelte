@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
   import { items, motorcycle, showToast } from '$lib/stores';
   import { api } from '$lib/api';
 
@@ -8,6 +9,12 @@
   let doneDate = $state(new Date().toISOString().slice(0, 10));
   let notes = $state('');
   let saving = $state(false);
+
+  // Pre-select item from ?item_id= URL param
+  $effect(() => {
+    const paramId = $page.url.searchParams.get('item_id');
+    if (paramId && !itemId) itemId = paramId;
+  });
 
   // Keep km in sync with motorcycle store on first load
   $effect(() => {

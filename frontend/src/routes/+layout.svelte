@@ -4,6 +4,7 @@
   import BottomNav from '$lib/components/BottomNav.svelte';
   import Toast from '$lib/components/Toast.svelte';
   import InstallBanner from '$lib/components/InstallBanner.svelte';
+  import ItemDetailDrawer from '$lib/components/ItemDetailDrawer.svelte';
   import { motorcycle, items } from '$lib/stores';
   import { api } from '$lib/api';
 
@@ -26,3 +27,4 @@
   {@render children()}
 </main>
 <BottomNav />
+<ItemDetailDrawer />

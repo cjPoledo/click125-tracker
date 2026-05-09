@@ -35,6 +35,7 @@ export const api = {
 
   log: {
     list: (page = 1) => request<{ total: number; page: number; page_size: number; items: LogEntry[] }>(`/api/log?page=${page}`),
+    listByItem: (itemId: number) => request<LogEntry[]>(`/api/log?item_id=${itemId}`),
     get: (id: number) => request<LogEntry>(`/api/log/${id}`),
     create: (data: { item_id: number; done_at_km: number; done_date: string; notes?: string }) =>
       request<LogEntry>('/api/log', { method: 'POST', body: JSON.stringify(data) }),

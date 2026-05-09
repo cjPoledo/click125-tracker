@@ -12,30 +12,46 @@ def compute_status(
     last_log: Optional[MaintenanceLog],
     current_km: int,
     today: date,
+    purchase_date: Optional[date] = None,
 ) -> str:
-    if last_log is None:
-        return "overdue"
-
     statuses: list[str] = []
 
     if item.interval_km is not None:
-        remaining_km = (last_log.done_at_km + item.interval_km) - current_km
-        if remaining_km < 0:
+        if last_log is None and purchase_date is None:
             statuses.append("overdue")
-        elif remaining_km < DUE_SOON_KM:
-            statuses.append("due_soon")
         else:
-            statuses.append("ok")
+            baseline_km = last_log.done_at_km if last_log else 0
+            remaining_km = (baseline_km + item.interval_km) - current_km
+            if remaining_km < 0:
+                statuses.append("overdue")
+            elif remaining_km < DUE_SOON_KM:
+                statuses.append("due_soon")
+            else:
+                statuses.append("ok")
 
     if item.interval_months is not None:
-        due_date = last_log.done_date + relativedelta(months=item.interval_months)
-        remaining_days = (due_date - today).days
-        if remaining_days < 0:
+        baseline_date = last_log.done_date if last_log else purchase_date
+        if baseline_date is None:
             statuses.append("overdue")
-        elif remaining_days < DUE_SOON_DAYS:
-            statuses.append("due_soon")
         else:
-            statuses.append("ok")
+            due_date = baseline_date + relativedelta(months=item.interval_months)
+            remaining_days = (due_date - today).days
+            if remaining_days < 0:
+                statuses.append("overdue")
+            elif remaining_days < DUE_SOON_DAYS:
+                statuses.append("due_soon")
+            else:
+                statuses.append("ok")
+
+    if item.replace_months is not None:
+        replace_d = replace_days_remaining(item, last_log, purchase_date, today)
+        if replace_d is not None:
+            if replace_d < 0:
+                statuses.append("overdue")
+            elif replace_d < DUE_SOON_DAYS:
+                statuses.append("due_soon")
+            else:
+                statuses.append("ok")
 
     if not statuses:
         return "inspect"
@@ -46,14 +62,47 @@ def compute_status(
     return "ok"
 
 
-def km_remaining(item: MaintenanceItem, last_log: Optional[MaintenanceLog], current_km: int) -> Optional[int]:
-    if last_log is None or item.interval_km is None:
+def km_remaining(
+    item: MaintenanceItem,
+    last_log: Optional[MaintenanceLog],
+    current_km: int,
+    purchase_date: Optional[date] = None,
+) -> Optional[int]:
+    if item.interval_km is None:
         return None
-    return (last_log.done_at_km + item.interval_km) - current_km
+    if last_log is None and purchase_date is None:
+        return None
+    baseline_km = last_log.done_at_km if last_log else 0
+    return (baseline_km + item.interval_km) - current_km
 
 
-def days_remaining(item: MaintenanceItem, last_log: Optional[MaintenanceLog], today: date) -> Optional[int]:
-    if last_log is None or item.interval_months is None:
+def days_remaining(
+    item: MaintenanceItem,
+    last_log: Optional[MaintenanceLog],
+    today: date,
+    purchase_date: Optional[date] = None,
+) -> Optional[int]:
+    if item.interval_months is None:
         return None
-    due_date = last_log.done_date + relativedelta(months=item.interval_months)
+    baseline_date = last_log.done_date if last_log else purchase_date
+    if baseline_date is None:
+        return None
+    due_date = baseline_date + relativedelta(months=item.interval_months)
     return (due_date - today).days
+
+
+def replace_days_remaining(
+    item: MaintenanceItem,
+    last_log: Optional[MaintenanceLog],
+    purchase_date: Optional[date] = None,
+    today: Optional[date] = None,
+) -> Optional[int]:
+    if item.replace_months is None:
+        return None
+    baseline = last_log.done_date if last_log else purchase_date
+    if baseline is None:
+        return None
+    if today is None:
+        today = date.today()
+    due = baseline + relativedelta(months=item.replace_months)
+    return (due - today).days

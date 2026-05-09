@@ -4,7 +4,7 @@ from sqlmodel import Session, select
 
 from app.database import get_session
 from app.models import MaintenanceItem, MaintenanceLog, Motorcycle
-from app.due_logic import compute_status, km_remaining, days_remaining
+from app.due_logic import compute_status, km_remaining, days_remaining, replace_days_remaining
 
 router = APIRouter(prefix="/api/items", tags=["items"])
 
@@ -13,6 +13,7 @@ router = APIRouter(prefix="/api/items", tags=["items"])
 def list_items(session: Session = Depends(get_session)):
     moto = session.exec(select(Motorcycle)).first()
     current_km = moto.current_odometer_km if moto else 0
+    purchase_date = moto.purchase_date if moto else None
     today = date.today()
 
     items = session.exec(select(MaintenanceItem).order_by(MaintenanceItem.id)).all()
@@ -25,21 +26,23 @@ def list_items(session: Session = Depends(get_session)):
             .order_by(MaintenanceLog.done_date.desc())
         ).first()
 
-        status = compute_status(item, last_log, current_km, today)
+        status = compute_status(item, last_log, current_km, today, purchase_date)
 
         result.append({
             "id": item.id,
             "name": item.name,
             "interval_km": item.interval_km,
             "interval_months": item.interval_months,
+            "replace_months": item.replace_months,
             "notes": item.notes,
             "maintenance_level": item.maintenance_level,
             "status": status,
             "last_done_km": last_log.done_at_km if last_log else None,
             "last_done_date": str(last_log.done_date) if last_log else None,
             "last_log_id": last_log.id if last_log else None,
-            "km_remaining": km_remaining(item, last_log, current_km),
-            "days_remaining": days_remaining(item, last_log, today),
+            "km_remaining": km_remaining(item, last_log, current_km, purchase_date),
+            "days_remaining": days_remaining(item, last_log, today, purchase_date),
+            "replace_days_remaining": replace_days_remaining(item, last_log, purchase_date, today),
         })
 
     return result

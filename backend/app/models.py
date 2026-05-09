@@ -9,6 +9,7 @@ class Motorcycle(SQLModel, table=True):
     year: int = 2024
     current_odometer_km: int = 0
     last_odometer_update: Optional[datetime] = None
+    purchase_date: Optional[date] = None
 
 
 class MaintenanceItem(SQLModel, table=True):
@@ -16,6 +17,7 @@ class MaintenanceItem(SQLModel, table=True):
     name: str = Field(unique=True)
     interval_km: Optional[int] = None
     interval_months: Optional[int] = None
+    replace_months: Optional[int] = None
     notes: Optional[str] = None
     maintenance_level: Optional[str] = None
 

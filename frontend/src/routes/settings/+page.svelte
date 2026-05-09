@@ -6,6 +6,9 @@
   let odometerInput = $state('');
   let savingOdo = $state(false);
 
+  let purchaseDate = $state('');
+  let savingPurchaseDate = $state(false);
+
   let botToken = $state('');
   let chatId = $state('');
   let savingTelegram = $state(false);
@@ -15,6 +18,7 @@
 
   onMount(async () => {
     odometerInput = $motorcycle ? String($motorcycle.current_odometer_km) : '0';
+    purchaseDate = $motorcycle?.purchase_date ?? '';
     try {
       const settings = await api.settings.get();
       botToken = settings.telegram_bot_token ?? '';
@@ -38,6 +42,21 @@
       showToast('Failed to update odometer', 'error');
     } finally {
       savingOdo = false;
+    }
+  }
+
+  async function savePurchaseDate() {
+    savingPurchaseDate = true;
+    try {
+      const updated = await api.motorcycle.updatePurchaseDate(purchaseDate || null);
+      motorcycle.set(updated);
+      const refreshed = await api.items.list();
+      items.set(refreshed);
+      showToast('Release date saved');
+    } catch {
+      showToast('Failed to save release date', 'error');
+    } finally {
+      savingPurchaseDate = false;
     }
   }
 
@@ -96,15 +115,23 @@
   </div>
 
   <div class="content">
-    <!-- Odometer section -->
+    <!-- Motorcycle info section -->
     <div class="section">
-      <div class="section-title">Odometer</div>
+      <div class="section-title">Motorcycle</div>
       <div class="form-group">
         <label class="label" for="odo-setting">Current odometer (km)</label>
         <input id="odo-setting" type="number" inputmode="numeric" class="input odometer" bind:value={odometerInput} min="0" style="font-size: 20px;" />
       </div>
       <button class="btn btn-primary btn-full" onclick={saveOdometer} disabled={savingOdo}>
         {#if savingOdo}<span class="spinner"></span>{:else}Update Odometer{/if}
+      </button>
+      <div class="form-group" style="margin-top: var(--space-md);">
+        <label class="label" for="purchase-date">Release / Purchase Date</label>
+        <p class="field-desc">Used to calculate due dates when no service has been logged yet.</p>
+        <input id="purchase-date" type="date" class="input" bind:value={purchaseDate} />
+      </div>
+      <button class="btn btn-secondary btn-full" onclick={savePurchaseDate} disabled={savingPurchaseDate}>
+        {#if savingPurchaseDate}<span class="spinner"></span>{:else}Save Release Date{/if}
       </button>
     </div>
 
@@ -159,4 +186,5 @@
   .section { padding: var(--space-sm) 0; }
   .section-title { font-size: var(--text-sm); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-muted); margin-bottom: var(--space-md); }
   .section-desc { font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-md); line-height: 1.5; }
+  .field-desc { font-size: var(--text-xs); color: var(--color-text-muted); margin-bottom: 6px; line-height: 1.4; }
 </style>

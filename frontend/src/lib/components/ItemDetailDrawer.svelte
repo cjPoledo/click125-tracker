@@ -51,7 +51,19 @@
   function intervalExtra(name: string): string | null {
     if (name === 'Engine Oil Change') return 'First change at 1,000 km.';
     if (name === 'Radiator Coolant') return 'First replacement at 3 years; every 2 years thereafter.';
+    if (name === 'Spark Plug') return 'Inspect every 6,000 km; replace every 12,000 km.';
+    if (name === 'Drive Belt') return 'Inspect every 12,000 km; replace every 24,000 km.';
+    if (name === 'Brake Fluid') return 'Replace every 2 years regardless of inspection result.';
+    if (name === 'Engine Idle Speed') return 'Also check at 1,000 km.';
+    if (name === 'Brake System') return 'Also check at 1,000 km.';
+    if (name === 'Nuts & Bolts') return 'Also check at 1,000 km.';
     return null;
+  }
+
+  function replaceDueLabel(days: number): string {
+    if (days < 0) return `${Math.abs(days)} days overdue`;
+    if (days === 0) return 'Due today';
+    return `${days} days remaining`;
   }
 
   const LEVEL_EMOJI: Record<NonNullable<MaintenanceLevel>, string> = {
@@ -146,6 +158,14 @@
             <span class="cell-label">Next due</span>
             <span class="cell-value">{nextDueLabel(item)}</span>
           </div>
+          {#if item.replace_days_remaining !== null}
+            <div class="status-cell" style="margin-top: 8px;">
+              <span class="cell-label">Mandatory replace due</span>
+              <span class="cell-value" class:overdue-text={item.replace_days_remaining < 0}>
+                {replaceDueLabel(item.replace_days_remaining)}
+              </span>
+            </div>
+          {/if}
         </div>
       </section>
 
@@ -329,6 +349,7 @@
   .cell-label  { font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
   .cell-value  { font-size: var(--text-sm); color: var(--color-text); }
   .muted       { color: var(--color-text-muted); }
+  .overdue-text { color: var(--color-overdue); }
 
   /* Notes */
   .notes-text {

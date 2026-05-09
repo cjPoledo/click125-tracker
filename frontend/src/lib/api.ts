@@ -27,6 +27,11 @@ export const api = {
         method: 'PUT',
         body: JSON.stringify({ current_odometer_km: km }),
       }),
+    updatePurchaseDate: (purchase_date: string | null) =>
+      request<Motorcycle>('/api/motorcycle/purchase-date', {
+        method: 'PUT',
+        body: JSON.stringify({ purchase_date }),
+      }),
   },
 
   items: {
